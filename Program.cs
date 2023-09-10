@@ -4,6 +4,7 @@ using PokemonReview;
 using PokemonReviewApp;
 using PokemonReview.Interfaces;
 using PokemonReview.Repository;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 //Seed or populate our DB with Seed.cs
 builder.Services.AddTransient<Seed>();
+
 builder.Services.AddScoped<IPokemonRepository, PokemonReposity>();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
